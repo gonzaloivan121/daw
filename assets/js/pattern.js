@@ -1,10 +1,9 @@
 class Pattern {
     tracks = [];
-    bars = 4;
-    pulses = 4;
 
-    constructor(length = 16) {
-        this.length = length;
+    constructor(bars = 4, pulses = 4) {
+        this.bars = bars;
+        this.pulses = pulses;
         this.initialize();
     }
 
@@ -27,7 +26,9 @@ class Pattern {
     set_pulses(pulses) { this.pulses = pulses; }
 
     add_track() {
-        this.tracks.push(new PatternTrack(this.get_last_track_id() + 1));
+        var track = new PatternTrack(this.get_last_track_id() + 1);
+        this.tracks.push(track);
+        return track;
     }
 
     remove_track(id) {
@@ -56,6 +57,17 @@ class Pattern {
         }
 
         return track_found;
+    }
+
+    get_track(id) {
+        for (var i = 0; i < this.tracks.length; i++) {
+            const track = this.tracks[i];
+            if (track.id === id) {
+                return track;
+            }
+        }
+
+        return false;
     }
 
     get_last_track_id() {

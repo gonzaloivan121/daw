@@ -23,11 +23,13 @@ class PatternTrack {
     }
 
     initialize() {
-        this.audio_source = document.createElement('audio');
-        this.audio_source.src = this.audio_clip;
-        this.audio_source.setAttribute('preload', 'auto');
-        this.audio_source.classList.add('clip');
-        document.body.appendChild(this.audio_source);
+        if (this.audio_clip !== null) {
+            this.audio_source = document.createElement('audio');
+            this.audio_source.src = this.audio_clip;
+            this.audio_source.setAttribute('preload', 'auto');
+            this.audio_source.classList.add('clip');
+            document.body.appendChild(this.audio_source);
+        }
     }
 
     set_name(name) { this.name = name; }
