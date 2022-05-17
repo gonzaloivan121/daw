@@ -1,5 +1,6 @@
 class Pattern {
     tracks = [];
+    bpm = 120;
 
     constructor(bars = 4, pulses = 4) {
         this.bars = bars;
@@ -12,14 +13,34 @@ class Pattern {
         this.tracks.push(new PatternTrack(2, './assets/audio/snare.wav', 'Snare'));
         this.tracks.push(new PatternTrack(3, './assets/audio/clap.wav', 'Clap'));
         this.tracks.push(new PatternTrack(4, './assets/audio/hat.wav', 'Hat'));
+        this.tracks.push(new PatternTrack(5, './assets/audio/crash.wav', 'Crash'));
     }
 
     play() {
+        var total_pulses = this.bars * this.pulses;
+        var step_delay = Math.round((150 * 100) / this.bpm);
+        var current_pulse = 1;
 
+        console.log(step_delay)
+
+        this.interval = setInterval(() => {
+            if (current_pulse < total_pulses) {
+                current_pulse++;
+            } else if (current_pulse >= total_pulses) {
+                current_pulse = 1;
+            }
+
+            this.tracks.forEach(track => {
+                var sample = $('.sample[data-track="' + track.id + '"][data-column="' + current_pulse + '"]');
+                if (sample.hasClass("active")) {
+                    track.play();
+                }
+            });
+        }, step_delay);
     }
 
     stop() {
-
+        clearInterval(this.interval);
     }
 
     set_bars(bars) { this.bars = bars; }

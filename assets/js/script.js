@@ -1,15 +1,20 @@
 var playlist = new Playlist();
-var pattern = new Pattern();
+var pattern = new Pattern(4, 4);
 
 const container = $("#container");
+const content = $("#content");
 
 function initialize() {
     pattern.tracks.forEach(track => {
         generate_pattern_track(track);
     });
 
-    container.draggable();
-    container.resizable();
+    container.draggable({
+        handle: ".header"
+    });
+    container.resizable({
+        minWidth: 500
+    });
 }
 
 function generate_pattern_track(track) {
@@ -19,39 +24,58 @@ function generate_pattern_track(track) {
     track_element.attr("id", "pattern-track-" + track.id);
     track_element.attr("data-id", track.id);
 
-    var innerHTML = "<div class='pattern-track-name'>" + track.name + "</div>";
+    var innerHTML = "";
 
+    innerHTML += "<button class='edit-pattern-track box-shadow' onclick='edit_pattern_track(" + track.id + ")'><div class='pattern-track-name'>" + track.name + "</div></button>";
     innerHTML += "<div class='pattern-track-container'>";
     
+    var i = 1;
+
     for (var bar = 1; bar <= pattern.bars; bar++) {
         for (var pulse = 1; pulse <= pattern.pulses; pulse++) {
             innerHTML +=
-            "<div class='column sample " + (bar % 2 == 0 ? 'pair' : 'odd') + "' data-bar='" + bar + "' data-pulse='" + pulse + "' data-track='" + track.id + "'>" +
+            "<div class='column sample box-shadow " + (bar % 2 == 0 ? 'pair' : 'odd') + "' data-column='" + i + "' data-bar='" + bar + "' data-pulse='" + pulse + "' data-track='" + track.id + "'>" +
             "" +
             "</div>";
+            i++;
         }
     }
 
     innerHTML += "</div>";
 
     track_element.html(innerHTML);
-    container.append(track_element);
+    content.append(track_element);
 
     $("#" + track_element.attr("id") + " .sample").click((event) => {
         const sample = $(event.target);
 
-        var bar = sample.data("bar");
-        var pulse = sample.data("pulse");
-        var track = sample.data("track");
-
-        console.log("Bar: " + bar)
-        console.log("Pulse: " + pulse)
-        console.log("Track: " + track)
+        if (sample.hasClass("active")) {
+            sample.removeClass("active");
+        } else {
+            sample.addClass("active");
+        }
     })
 }
 
 function remove_pattern_track(id) {
+    pattern.remove_track(id);
+}
 
+function edit_pattern_track(id) {
+    var track = pattern.get_track(id);
+    if (!track) {
+        return;
+    } else {
+        console.log(track)
+    }
+}
+
+function play() {
+    pattern.play();
+}
+
+function stop() {
+    pattern.stop();
 }
 
 function rename_pattern_track(id, name) {

@@ -32,6 +32,15 @@ class PatternTrack {
         }
     }
 
+    play() {
+        if (!this.audio_source.currentTime > 0 || this.audio_source.paused) {
+            this.audio_source.play();
+        } else {
+            this.audio_source.currentTime = 0;
+            this.audio_source.play();
+        }
+    }
+
     set_name(name) { this.name = name; }
     set_audio_clip(audio_clip) { this.audio_clip = audio_clip; }
 }
