@@ -17,7 +17,7 @@ function generate_pattern_track(track) {
     track_element.addClass("pattern-track");
     track_element.addClass("row");
     track_element.attr("id", "pattern-track-" + track.id);
-    track_element.data("id", track.id);
+    track_element.attr("data-id", track.id);
 
     var innerHTML = "<div class='pattern-track-name'>" + track.name + "</div>";
 
@@ -37,13 +37,16 @@ function generate_pattern_track(track) {
     track_element.html(innerHTML);
     container.append(track_element);
 
-    $(".sample").click((event) => {
+    $("#" + track_element.attr("id") + " .sample").click((event) => {
         const sample = $(event.target);
 
         var bar = sample.data("bar");
         var pulse = sample.data("pulse");
         var track = sample.data("track");
-        console.log(bar, pulse, track)
+
+        console.log("Bar: " + bar)
+        console.log("Pulse: " + pulse)
+        console.log("Track: " + track)
     })
 }
 
