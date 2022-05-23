@@ -1,19 +1,19 @@
 var playlist = new Playlist();
 var pattern = new Pattern(4, 4);
 
-const container = $("#container");
-const content = $("#content");
+const pattern_container = $("#pattern-container");
+const pattern_content = $("#pattern-content");
 
 function initialize() {
     pattern.tracks.forEach(track => {
         generate_pattern_track(track);
     });
 
-    container.draggable({
+    pattern_container.draggable({
         handle: ".header"
     });
-    container.resizable({
-        minWidth: 500
+    pattern_container.resizable({
+        minWidth: 600
     });
 }
 
@@ -44,9 +44,9 @@ function generate_pattern_track(track) {
     innerHTML += "</div>";
 
     track_element.html(innerHTML);
-    content.append(track_element);
+    pattern_content.append(track_element);
 
-    $("#" + track_element.attr("id") + " .sample").click((event) => {
+    $("#pattern-track-" + track.id + " .sample").click((event) => {
         const sample = $(event.target);
 
         if (sample.hasClass("active")) {
@@ -58,7 +58,9 @@ function generate_pattern_track(track) {
 }
 
 function remove_pattern_track(id) {
-    pattern.remove_track(id);
+    if (pattern.remove_track(id)) {
+        $("#pattern-track-" + id).remove();
+    }
 }
 
 function edit_pattern_track(id) {
@@ -76,6 +78,10 @@ function play() {
 
 function stop() {
     pattern.stop();
+}
+
+function pause() {
+    pattern.pause();
 }
 
 function rename_pattern_track(id, name) {
