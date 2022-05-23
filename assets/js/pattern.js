@@ -1,6 +1,8 @@
 class Pattern {
     tracks = [];
     bpm = 120;
+    is_playing = false;
+    current_pulse = 0;
 
     constructor(bars = 4, pulses = 4) {
         this.bars = bars;
@@ -17,30 +19,69 @@ class Pattern {
     }
 
     play() {
-        var total_pulses = this.bars * this.pulses;
-        var step_delay = Math.round((150 * 100) / this.bpm);
-        var current_pulse = 1;
+        if (!this.is_playing) {
+            this.is_playing = true;
+            var total_pulses = this.bars * this.pulses;
+            var step_bpm = this.bpm * this.pulses / 4;
+            var step_delay = Math.round((150 * 100) / step_bpm);
+            var current_pulse = this.current_pulse;
 
-        console.log(step_delay)
-
-        this.interval = setInterval(() => {
-            if (current_pulse < total_pulses) {
-                current_pulse++;
-            } else if (current_pulse >= total_pulses) {
-                current_pulse = 1;
-            }
-
-            this.tracks.forEach(track => {
-                var sample = $('.sample[data-track="' + track.id + '"][data-column="' + current_pulse + '"]');
-                if (sample.hasClass("active")) {
-                    track.play();
+            this.interval = setInterval(() => {
+                if (current_pulse < total_pulses) {
+                    current_pulse++;
+                    this.current_pulse = current_pulse;
+                } else {
+                    current_pulse = 1;
                 }
-            });
-        }, step_delay);
+
+                this.tracks.forEach(track => {
+                    var sample = $('.sample[data-track="' + track.id + '"][data-column="' + current_pulse + '"]');
+                    if (sample.hasClass("active")) {
+                        track.play();
+                    }
+                    sample.addClass("current-step");
+                    setTimeout(() => {
+                        sample.removeClass("current-step");
+                    }, step_delay);
+                });
+            }, step_delay);
+        }
+        
     }
 
     stop() {
-        clearInterval(this.interval);
+        if (this.is_playing) {
+            this.is_playing = false;
+            this.current_pulse = 0; 
+            clearInterval(this.interval);
+        }
+    }
+
+    pause() {
+        if (this.is_playing) {
+            this.is_playing = false;
+            clearInterval(this.interval);
+        }
+    }
+
+    fill_track_every(track_id, beats) {
+        for (var column = 1; column <= (this.bars * this.pulses); column += beats) {
+            var sample = $('.sample[data-track="' + track_id + '"][data-column="' + column + '"]');
+
+            if (!sample.hasClass("active")) {
+                sample.addClass("active");
+            }
+        }
+    }
+
+    clear_track(track_id) {
+        for (var column = 1; column <= (this.bars * this.pulses); column++) {
+            var sample = $('.sample[data-track="' + track_id + '"][data-column="' + column + '"]');
+
+            if (sample.hasClass("active")) {
+                sample.removeClass("active");
+            }
+        }
     }
 
     set_bars(bars) { this.bars = bars; }
@@ -58,8 +99,8 @@ class Pattern {
         for (var i = 0; i < this.tracks.length; i++) {
             const track = this.tracks[i];
             if (track.id === id) {
-                this.tracks.splice(i, 1);
                 track_found = true;
+                this.tracks.splice(i, 1);
             }
         }
 
