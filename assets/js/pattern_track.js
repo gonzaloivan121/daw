@@ -33,11 +33,15 @@ class PatternTrack {
     }
 
     play() {
-        if (!this.audio_source.currentTime > 0 || this.audio_source.paused) {
-            this.audio_source.play();
+        if (this.audio_source !== null) {
+            if (!this.audio_source.currentTime > 0 || this.audio_source.paused) {
+                this.audio_source.play();
+            } else {
+                this.audio_source.currentTime = 0;
+                this.audio_source.play();
+            }
         } else {
-            this.audio_source.currentTime = 0;
-            this.audio_source.play();
+            console.log("No audio clip on " + this.name)
         }
     }
 
