@@ -1,19 +1,26 @@
 var playlist = new Playlist();
 var pattern = new Pattern(4, 4);
 
+var old_pattern_bars = pattern.bars;
+var old_pattern_pulses = pattern.pulses;
+
 const pattern_container = $("#pattern-container");
 const pattern_content = $("#pattern-content");
 
 function initialize() {
-    pattern.tracks.forEach(track => {
-        generate_pattern_track(track);
-    });
+    generate_initial_tracks();
 
     pattern_container.draggable({
         handle: ".header"
     });
     pattern_container.resizable({
         minWidth: 600
+    });
+}
+
+function generate_initial_tracks() {
+    pattern.tracks.forEach(track => {
+        generate_pattern_track(track);
     });
 }
 
@@ -82,6 +89,53 @@ function stop() {
 
 function pause() {
     pattern.pause();
+}
+
+function set_pattern_bars(bars) {
+    pattern.set_bars(bars);
+    update_bars_pulses();
+}
+
+function set_pattern_pulses(pulses) {
+    pattern.set_pulses(pulses);
+    update_bars_pulses();
+}
+
+function update_bars_pulses() {
+    pattern.tracks.forEach(track => {
+        if (pattern.bars > old_pattern_bars) {
+            for (var bar = old_pattern_bars; bar < pattern.bars; bar++) {
+                for (var pulse = 1; pulse < pattern.pulses; pulse++) {
+                    var innerHTML =
+                        "<div class='column sample box-shadow " + (bar % 2 == 0 ? 'pair' : 'odd') + "' data-column='" + i + "' data-bar='" + bar + "' data-pulse='" + pulse + "' data-track='" + track.id + "'>" +
+                        "</div>";
+                    $(".pattern-track-container").append(innerHTML);
+                }
+            }
+        } else if (pattern.bars < old_pattern_bars) {
+            for (var i = pattern.bars; i < old_pattern_bars; i++) {
+                $('[data-bar="' + (i + 1) + '"]').remove();
+            }
+        }
+
+        if (pattern.pulses > old_pattern_pulses) {
+            for (var bar = old_pattern_bars; bar < pattern.bars; bar++) {
+                for (var pulse = 1; pulse < pattern.pulses; pulse++) {
+                    var innerHTML =
+                        "<div class='column sample box-shadow " + (bar % 2 == 0 ? 'pair' : 'odd') + "' data-column='" + i + "' data-bar='" + bar + "' data-pulse='" + pulse + "' data-track='" + track.id + "'>" +
+                        "</div>";
+                    $(".pattern-track-container").append(innerHTML);
+                }
+            }
+        } else if (pattern.pulses < old_pattern_pulses) {
+            for (var i = pattern.pulses; i < old_pattern_pulses; i++) {
+                $('[data-pulse="' + (i + 1) + '"]').remove();
+            }
+        }
+    });
+
+    old_pattern_bars = pattern.bars;
+    old_pattern_pulses = pattern.pulses;
 }
 
 function rename_pattern_track(id, name) {
