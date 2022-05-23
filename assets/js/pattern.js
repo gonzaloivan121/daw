@@ -15,7 +15,8 @@ class Pattern {
         this.tracks.push(new PatternTrack(2, './assets/audio/snare.wav', 'Snare'));
         this.tracks.push(new PatternTrack(3, './assets/audio/clap.wav', 'Clap'));
         this.tracks.push(new PatternTrack(4, './assets/audio/hat.wav', 'Hat'));
-        this.tracks.push(new PatternTrack(5, './assets/audio/crash.wav', 'Crash'));
+        this.tracks.push(new PatternTrack(5, './assets/audio/open-hat.wav', 'Open Hat'));
+        this.tracks.push(new PatternTrack(6, './assets/audio/crash.wav', 'Crash'));
     }
 
     play() {
