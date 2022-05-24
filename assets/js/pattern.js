@@ -162,7 +162,7 @@ class Pattern {
         var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this));
         var download_anchor_node = document.createElement("a");
         download_anchor_node.setAttribute("href", data);
-        download_anchor_node.setAttribute("download", name + ".json");
+        download_anchor_node.setAttribute("download", name + ".save");
         document.body.appendChild(download_anchor_node);
         download_anchor_node.click();
         download_anchor_node.remove();
@@ -175,6 +175,7 @@ class Pattern {
         this.bpm = import_obj.bpm;
         this.bars = import_obj.bars;
         this.pulses = import_obj.pulses;
+        this.current_pulse = 0;
 
         for (var i = 0; i < import_obj.tracks.length; i++) {
             this.tracks[i] = new PatternTrack(import_obj.tracks[i].id, null, null, import_obj.tracks[i]);
