@@ -17,12 +17,27 @@ function initialize() {
     pattern_container.resizable({
         minWidth: 600
     });
+
+    check_query();
 }
 
 function generate_initial_tracks() {
     pattern.tracks.forEach(track => {
         generate_pattern_track(track);
     });
+}
+
+function check_query() {
+    if (window.location.search !== "") {
+        var arr = window.location.search.slice(1).split("=");
+        arr[1] = decodeURI(arr[1]);
+        var obj = new Object();
+        obj[arr[0]] = arr[1];
+
+        if (arr[0] === "pattern") {
+            load_pattern("./assets/patterns/" + obj[arr[0]] + ".save");
+        }
+    }
 }
 
 function generate_pattern_track(track, to_load = null) {
@@ -34,7 +49,7 @@ function generate_pattern_track(track, to_load = null) {
 
     var innerHTML = "";
 
-    innerHTML += "<button class='edit-pattern-track box-shadow' onclick='edit_pattern_track(" + track.id + ")'><div class='pattern-track-name'>" + track.name + "</div></button>";
+    innerHTML += "<button class='edit-pattern-track box-shadow' name='" + track.name + "' onclick='edit_pattern_track(" + track.id + ")'><div class='pattern-track-name'>" + track.name + "</div></button>";
     innerHTML += "<div class='pattern-track-container'>";
     
     var i = 1;
@@ -109,6 +124,8 @@ function load_pattern(file = null) {
 }
 
 function load_pattern_json(obj) {
+    var is_playing = pattern.is_playing;
+    if (is_playing) pause();
     $(".pattern-track").remove();
     $(".pattern-clip").remove();
     pattern.load(obj);
@@ -117,6 +134,7 @@ function load_pattern_json(obj) {
             generate_pattern_track(pattern.tracks[i], pattern.saved_pattern[pattern.tracks[i].id]);
         }
     }
+    if (is_playing) play();
 }
 
 function play() {
