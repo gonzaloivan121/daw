@@ -3,6 +3,7 @@ class Pattern {
     bpm = 120;
     is_playing = false;
     current_pulse = 0;
+    saved_pattern = [];
 
     constructor(bars = 4, pulses = 4) {
         this.bars = bars;
@@ -17,6 +18,13 @@ class Pattern {
         this.tracks.push(new PatternTrack(4, './assets/audio/hat.wav', 'Hat'));
         this.tracks.push(new PatternTrack(5, './assets/audio/open-hat.wav', 'Open Hat'));
         this.tracks.push(new PatternTrack(6, './assets/audio/crash.wav', 'Crash'));
+
+        for (var i = 1; i <= this.tracks.length; i++) {
+            this.saved_pattern[i] = [];
+            for (var j = 1; j <= (this.bars * this.pulses); j++) {
+                this.saved_pattern[i][j] = false;
+            }
+        }
     }
 
     play() {
@@ -47,7 +55,6 @@ class Pattern {
                 });
             }, step_delay);
         }
-        
     }
 
     stop() {
@@ -102,6 +109,7 @@ class Pattern {
             if (track.id === id) {
                 track_found = true;
                 this.tracks.splice(i, 1);
+                delete this.saved_pattern[track.id];
             }
         }
 
@@ -109,17 +117,18 @@ class Pattern {
     }
 
     duplicate_track(id) {
-        var track_found = false;
+        var duplicated_track = false;
 
         for (var i = 0; i < this.tracks.length; i++) {
             const track = this.tracks[i];
             if (track.id === id) {
-                track_found = true;
-                this.tracks.push(track.duplicate(this.get_last_track_id() + 1));
+                duplicated_track = track.duplicate(this.get_last_track_id() + 1);
+                this.tracks.push(duplicated_track);
+                this.saved_pattern[duplicated_track.id] = this.saved_pattern[track.id];
             }
         }
 
-        return track_found;
+        return duplicated_track;
     }
 
     get_track(id) {
@@ -140,6 +149,41 @@ class Pattern {
             return last_track.id;
         } else {
             return 0;
+        }
+    }
+
+    save(track_id, beat, active) {
+        this.saved_pattern[track_id][beat] = active;
+    }
+
+    export(name) {
+        var export_obj = {
+            tracks: this.tracks,
+            pattern: this.saved_pattern
+        };
+
+        var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(export_obj));
+        var download_anchor_node = document.createElement("a");
+        download_anchor_node.setAttribute("href", data);
+        download_anchor_node.setAttribute("download", name + ".json");
+        document.body.appendChild(download_anchor_node);
+        download_anchor_node.click();
+        download_anchor_node.remove();
+    }
+
+    load(file) {
+        var import_obj = JSON.parse(file);
+        this.tracks = [];
+        this.saved_pattern = [];
+
+        for (var i = 0; i < import_obj.tracks.length; i++) {
+            this.tracks[i] = new PatternTrack(import_obj.tracks[i].id, null, null, import_obj.tracks[i]);
+        }
+
+        for (var i = 0; i < import_obj.pattern.length; i++) {
+            if (import_obj.pattern[i] !== null) {
+                this.saved_pattern[i] = import_obj.pattern[i];
+            }
         }
     }
 }

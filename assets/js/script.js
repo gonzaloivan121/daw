@@ -24,7 +24,7 @@ function generate_initial_tracks() {
     });
 }
 
-function generate_pattern_track(track) {
+function generate_pattern_track(track, to_load = null) {
     var track_element = $(document.createElement("div"));
     track_element.addClass("pattern-track");
     track_element.addClass("row");
@@ -41,7 +41,7 @@ function generate_pattern_track(track) {
     for (var bar = 1; bar <= pattern.bars; bar++) {
         for (var pulse = 1; pulse <= pattern.pulses; pulse++) {
             innerHTML +=
-            "<div class='column sample box-shadow " + (bar % 2 == 0 ? 'pair' : 'odd') + "' data-column='" + i + "' data-bar='" + bar + "' data-pulse='" + pulse + "' data-track='" + track.id + "'>" +
+            "<div class='column sample box-shadow " + (bar % 2 == 0 ? 'pair' : 'odd') + " " + (to_load !== null ? (to_load[i] ? 'active' : '') : '') + "' data-column='" + i + "' data-bar='" + bar + "' data-pulse='" + pulse + "' data-track='" + track.id + "'>" +
             "" +
             "</div>";
             i++;
@@ -55,11 +55,14 @@ function generate_pattern_track(track) {
 
     $("#pattern-track-" + track.id + " .sample").click((event) => {
         const sample = $(event.target);
+        const beat = sample.data("column");
 
         if (sample.hasClass("active")) {
             sample.removeClass("active");
+            pattern.save(track.id, beat, false);
         } else {
             sample.addClass("active");
+            pattern.save(track.id, beat, true);
         }
     })
 }
@@ -77,6 +80,31 @@ function edit_pattern_track(id) {
     } else {
         console.log(track)
     }
+}
+
+function duplicate_pattern_track(id) {
+    var new_track = pattern.duplicate_track(id);
+
+    if (new_track !== false) {
+        generate_pattern_track(new_track);
+    }
+}
+
+function save_pattern(name) {
+    pattern.export(name);
+}
+
+function load_pattern(file) {
+    $.get(file, (response) => {
+        $(".pattern-track").remove();
+        $(".pattern-clip").remove();
+        pattern.load(response);
+        for (var i = 0; i < pattern.tracks.length; i++) {
+            if (pattern.tracks[i] !== null) {
+                generate_pattern_track(pattern.tracks[i], pattern.saved_pattern[pattern.tracks[i].id]);
+            }
+        }
+    });
 }
 
 function play() {
