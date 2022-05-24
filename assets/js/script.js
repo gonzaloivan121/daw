@@ -97,10 +97,14 @@ function save_pattern(name) {
 function load_pattern(file) {
     $.get(file, (response) => {
         try {
-            var data = JSON.parse(response);
-            load_pattern_json(data);
+            try {
+                var data = JSON.parse(response);
+                load_pattern_json(data);
+            } catch (error) {
+                load_pattern_json(response);
+            }
         } catch (error) {
-            load_pattern_json(response);
+            return;
         }
     });
 }
