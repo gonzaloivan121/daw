@@ -26,8 +26,9 @@ class PatternTrack {
         if (this.audio_clip !== null) {
             this.audio_source = document.createElement('audio');
             this.audio_source.src = this.audio_clip;
+            this.audio_source.id = "pattern-clip-" + this.id;
             this.audio_source.setAttribute('preload', 'auto');
-            this.audio_source.classList.add('clip');
+            this.audio_source.classList.add('pattern-clip');
             document.body.appendChild(this.audio_source);
         }
     }
@@ -43,6 +44,10 @@ class PatternTrack {
         } else {
             console.log("No audio clip on " + this.name)
         }
+    }
+
+    duplicate(id) {
+        return new PatternTrack(id, null, null, this);
     }
 
     set_name(name) { this.name = name; }
