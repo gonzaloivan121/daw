@@ -78,6 +78,7 @@ class Pattern {
 
             if (!sample.hasClass("active")) {
                 sample.addClass("active");
+                this.save(track_id, column, true);
             }
         }
     }
@@ -88,6 +89,7 @@ class Pattern {
 
             if (sample.hasClass("active")) {
                 sample.removeClass("active");
+                this.save(track_id, column, false);
             }
         }
     }
@@ -157,12 +159,7 @@ class Pattern {
     }
 
     export(name) {
-        var export_obj = {
-            tracks: this.tracks,
-            pattern: this.saved_pattern
-        };
-
-        var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(export_obj));
+        var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this));
         var download_anchor_node = document.createElement("a");
         download_anchor_node.setAttribute("href", data);
         download_anchor_node.setAttribute("download", name + ".json");
@@ -175,13 +172,17 @@ class Pattern {
         this.tracks = [];
         this.saved_pattern = [];
 
+        this.bpm = import_obj.bpm;
+        this.bars = import_obj.bars;
+        this.pulses = import_obj.pulses;
+
         for (var i = 0; i < import_obj.tracks.length; i++) {
             this.tracks[i] = new PatternTrack(import_obj.tracks[i].id, null, null, import_obj.tracks[i]);
         }
 
-        for (var i = 0; i < import_obj.pattern.length; i++) {
-            if (import_obj.pattern[i] !== null) {
-                this.saved_pattern[i] = import_obj.pattern[i];
+        for (var i = 0; i < import_obj.saved_pattern.length; i++) {
+            if (import_obj.saved_pattern[i] !== null) {
+                this.saved_pattern[i] = import_obj.saved_pattern[i];
             }
         }
     }
