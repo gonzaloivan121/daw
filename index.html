@@ -13,6 +13,34 @@
 
 <body>
     <!-- START CONTENT -->
+    <nav class="menu">
+        <ul>
+            <li class="dropdown">
+                <button>File</button>
+                <ul class="dropdown-content">
+                    <li><button>Save</button></li>
+                    <li><button>Load</button></li>
+                    <li class="sub-dropdown">
+                        <button>Recents<span>></span></button>
+                        <ul class="sub-dropdown-content">
+                            <li><button onclick="load_pattern('./assets/patterns/Default.json')">Default</button></li>
+                            <li><button onclick="load_pattern('./assets/patterns/Prayer Position.json')">Prayer Position</button></li>
+                        </ul>
+                    </li>
+                    <li><button onclick="load_pattern('./assets/patterns/Default.json')">Clear</button></li>
+                    <li><button onclick="window.close()">Exit</button></li>
+                </ul>
+            </li>
+            <li><button>Edit</button></li>
+            <li><button>View</button></li>
+            <li><button>Insert</button></li>
+            <li><button>Item</button></li>
+            <li><button>Track</button></li>
+            <li><button>Options</button></li>
+            <li><button>Actions</button></li>
+            <li><button>Help</button></li>
+        </ul>
+    </nav>
     <div class="container" id="pattern-container">
         <div class="header">
             <div class="left-header">

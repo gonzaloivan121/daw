@@ -7,6 +7,75 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+ul, ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu {
+    background-color: #384247;
+    z-index: 10;
+}
+
+.menu li {
+    display: inline;
+}
+
+.menu button {
+    padding: 5px 10px;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: background-color .2s ease-in-out;
+    color: white;
+}
+
+.menu button:hover,
+.menu button:focus {
+    background-color: #515b61;
+}
+
+.menu .dropdown-content,
+.menu .dropdown-content .sub-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.menu .dropdown-content .sub-dropdown-content {
+    left: 100%;
+    top: 40%;
+}
+
+.menu .dropdown-content button {
+    color: black;
+    width: 100%;
+    text-align: left;
+    display: block;
+}
+
+.menu .dropdown-content button:hover,
+.menu .dropdown-content button:focus {
+    background-color: #d8dbdc;
+}
+
+.menu .dropdown:focus-within .dropdown-content {
+    display: block;
+}
+
+.menu .sub-dropdown:hover .sub-dropdown-content,
+.menu .sub-dropdown:focus-within .sub-dropdown-content {
+    display: block;
+}
+
+.menu .dropdown-content button span {
+    float: right;
+}
+
 .container {
     position: absolute;
     background: #5e696f;
