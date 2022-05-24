@@ -18,16 +18,18 @@
             <li class="dropdown">
                 <button>File</button>
                 <ul class="dropdown-content">
-                    <li><button>Save</button></li>
+                    <li><button onclick="save_pattern('Pattern')">Save</button></li>
                     <li><button>Load</button></li>
                     <li class="sub-dropdown">
                         <button>Recents<span>></span></button>
                         <ul class="sub-dropdown-content">
-                            <li><button onclick="load_pattern('./assets/patterns/Default.json')">Default</button></li>
-                            <li><button onclick="load_pattern('./assets/patterns/Prayer Position.json')">Prayer Position</button></li>
+                            <li><button onclick="load_pattern('./assets/patterns/Default.save')">Default</button></li>
+                            <li><button onclick="load_pattern('./assets/patterns/Prayer Position.save')">Prayer Position</button></li>
+                            <li><button onclick="load_pattern('./assets/patterns/Caos.save')">Caos</button></li>
+                            <li><button onclick="load_pattern('./assets/patterns/Idea New.save')">Idea New</button></li>
                         </ul>
                     </li>
-                    <li><button onclick="load_pattern('./assets/patterns/Default.json')">Clear</button></li>
+                    <li><button onclick="load_pattern('./assets/patterns/Default.save')">Clear</button></li>
                     <li><button onclick="window.close()">Exit</button></li>
                 </ul>
             </li>
