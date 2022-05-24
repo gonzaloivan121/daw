@@ -96,15 +96,24 @@ function save_pattern(name) {
 
 function load_pattern(file) {
     $.get(file, (response) => {
-        $(".pattern-track").remove();
-        $(".pattern-clip").remove();
-        pattern.load(response);
-        for (var i = 0; i < pattern.tracks.length; i++) {
-            if (pattern.tracks[i] !== null) {
-                generate_pattern_track(pattern.tracks[i], pattern.saved_pattern[pattern.tracks[i].id]);
-            }
+        try {
+            var data = JSON.parse(response);
+            load_pattern_json(data);
+        } catch (error) {
+            load_pattern_json(response);
         }
     });
+}
+
+function load_pattern_json(obj) {
+    $(".pattern-track").remove();
+    $(".pattern-clip").remove();
+    pattern.load(obj);
+    for (var i = 0; i < pattern.tracks.length; i++) {
+        if (pattern.tracks[i] !== null) {
+            generate_pattern_track(pattern.tracks[i], pattern.saved_pattern[pattern.tracks[i].id]);
+        }
+    }
 }
 
 function play() {

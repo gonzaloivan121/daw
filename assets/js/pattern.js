@@ -171,8 +171,7 @@ class Pattern {
         download_anchor_node.remove();
     }
 
-    load(file) {
-        var import_obj = JSON.parse(file);
+    load(import_obj) {
         this.tracks = [];
         this.saved_pattern = [];
 
