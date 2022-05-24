@@ -94,19 +94,17 @@ function save_pattern(name) {
     pattern.export(name);
 }
 
-function load_pattern(file) {
-    $.get(file, (response) => {
-        try {
+function load_pattern(file = null) {
+    if (file !== null) {
+        $.get(file, (response) => {
             try {
                 var data = JSON.parse(response);
                 load_pattern_json(data);
             } catch (error) {
                 load_pattern_json(response);
             }
-        } catch (error) {
-            return;
-        }
-    });
+        });
+    }
 }
 
 function load_pattern_json(obj) {
