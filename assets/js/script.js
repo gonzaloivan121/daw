@@ -11,7 +11,8 @@ function initialize() {
     generate_initial_tracks();
 
     pattern_container.draggable({
-        handle: ".header"
+        handle: ".header",
+        containment: "#main-section"
     });
     pattern_container.resizable({
         minWidth: 600

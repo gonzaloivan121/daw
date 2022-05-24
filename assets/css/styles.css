@@ -76,6 +76,11 @@ ul, ol {
     float: right;
 }
 
+section {
+    height: 100%;
+    width: 100%;
+}
+
 .container {
     position: absolute;
     background: #5e696f;
