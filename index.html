@@ -3,16 +3,24 @@
 <head>
     <title>DAW</title>
 
+    <meta name="title" content="DAW">
+    <meta name="description" content="Online DAW made entirely with vanilla JS and CSS3. You can see the code on GitHub.">
+    <meta name="author" content="Gonzalo Iván Chaparro Barese">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="./assets/css/jquery/jquery-ui.min.css">
     <link rel="stylesheet" href="./assets/css/jquery/jquery-ui.structure.min.css">
     <link rel="stylesheet" href="./assets/css/jquery/jquery-ui.theme.min.css">
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="./assets/js/jquery/jquery-3.6.0.min.js"></script>
     <script src="./assets/js/jquery/jquery-ui.min.js"></script>
+    <script src="./assets/js/jquery/jquery.ui.touch-punch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
-    <!-- START CONTENT -->
+    <!-- START MENU -->
     <nav class="menu">
         <ul>
             <li class="dropdown">
@@ -43,17 +51,20 @@
             <li><button>Help</button></li>
         </ul>
     </nav>
+    <!-- END MENU -->
 
+    <!-- START MAIN SECTION -->
     <section id="main-section">
-        <div class="container" id="pattern-container">
+        <!-- START PATTERN CONTAINER -->
+        <div class="container box-shadow" id="pattern-container">
             <div class="header">
                 <div class="left-header">
                     <div class="window-title">Pattern Editor</div>
                 </div>
                 <div class="right-header">
-                    <button>_</button>
-                    <button>□</button>
-                    <button>x</button>
+                    <button class="button box-shadow" onclick="minimize('pattern-content')"><span class="text">_</span></button>
+                    <button class="button box-shadow" onclick="maximize('pattern-container')"><span class="text">□</span></button>
+                    <button class="button box-shadow" onclick="close_window('pattern-container')"><span class="text">x</span></button>
                 </div>
             </div>
             <div class="content" id="pattern-content"></div>
@@ -61,12 +72,32 @@
                 <button class="add-pattern-track" onclick="add_pattern_track()">+</button>
             </div>
         </div>
+        <!-- END PATTERN CONTAINER -->
+
+        <!-- START EQUALIZER CONTAINER -->
+        <div class="container box-shadow" id="equalizer-container">
+            <div class="header">
+                <div class="left-header">
+                    <div class="window-title">Equalizer</div>
+                </div>
+                <div class="right-header">
+                    <button class="button box-shadow" onclick="minimize('equalizer-content')"><span class="text">_</span></button>
+                    <button class="button box-shadow" onclick="maximize('equalizer-container')"><span class="text">□</span></button>
+                    <button class="button box-shadow" onclick="close_window('equalizer-container')"><span class="text">x</span></button>
+                </div>
+            </div>
+            <div class="content" id="equalizer-content">
+                <canvas id="equalizer" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <!-- END EQUALIZER CONTAINER -->
     </section>
-    
-    <!-- END CONTENT -->
-    
+    <!-- END MAIN SECTION -->
+
     <!-- START SCRIPTS -->
     <script src="./assets/js/effect.js"></script>
+    <script src="./assets/js/effects/equalizer/band.js"></script>
+    <script src="./assets/js/effects/equalizer/equalizer.js"></script>
     <script src="./assets/js/midi.js"></script>
     <script src="./assets/js/item.js"></script>
     <script src="./assets/js/track.js"></script>

@@ -6,16 +6,30 @@ var old_pattern_pulses = pattern.pulses;
 
 const pattern_container = $("#pattern-container");
 const pattern_content = $("#pattern-content");
+const equalizer_container = $("#equalizer-container");
+
+const audioCtx = new AudioContext();
 
 function initialize() {
     generate_initial_tracks();
 
     pattern_container.draggable({
         handle: ".header",
-        containment: "#main-section"
+        containment: "#main-section",
+        start: function(event, ui) {
+            pattern_container.css('z-index', parseInt(pattern_container.css('z-index'))+1);
+        }
     });
     pattern_container.resizable({
         minWidth: 600
+    });
+
+    equalizer_container.draggable({
+        handle: ".header",
+        containment: "#main-section",
+        start: function(event, ui) {
+            equalizer_container.css('z-index', parseInt(equalizer_container.css('z-index'))+1);
+        }
     });
 
     check_query();
@@ -49,7 +63,7 @@ function generate_pattern_track(track, to_load = null) {
 
     var innerHTML = "";
 
-    innerHTML += "<button class='edit-pattern-track box-shadow' name='" + track.name + "' onclick='edit_pattern_track(" + track.id + ")'><div class='pattern-track-name'>" + track.name + "</div></button>";
+    innerHTML += "<button class='button box-shadow' name='" + track.name + "' onclick='edit_pattern_track(" + track.id + ")'><div class='text'>" + track.name + "</div></button>";
     innerHTML += "<div class='pattern-track-container'>";
     
     var i = 1;
@@ -212,6 +226,23 @@ function add_pattern_track() {
 
 function test() {
     playlist.add_track();
+}
+
+function minimize(id) {
+    $('#' + id).slideToggle();
+}
+
+function maximize(id) {
+    if ($('#' + id).hasClass('maximized')) {
+        $('#' + id).removeClass('maximized');
+    } else {
+        $('#' + id).addClass('maximized');
+    }
+}
+
+function close_window(id) {
+    $('#' + id).slideToggle();
+    //$('#' + id).hide();
 }
 
 initialize();
